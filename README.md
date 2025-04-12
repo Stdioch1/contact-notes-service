@@ -98,16 +98,3 @@ No user registration is required (single-user flow assumed).
 Notes must reference an existing contact (contactId).
 
 JWT expiration is 1 hour for demo purposes.
-
-💡 Improvements with More Time
-Swagger/OpenAPI documentation at /docs
-
-Role-based user system and registration
-
-Search/filter notes by contact, keyword
-
-Queued processing with BullMQ for async indexing
-
-Unit tests with Jest + Supertest
-
-Dockerized setup with Docker Compose
