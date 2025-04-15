@@ -1,100 +1,76 @@
-# Contact Notes Service 📝
-
-A backend service to manage contacts and their attached notes, built as a take-home project for Linq.
-
-This API supports JWT-based authentication, full CRUD operations, and field normalization for notes (e.g., `note_body`, `note_text` → `body`).
-
+Contact Notes Service API
+A secure, documented REST API for managing contacts and notes, built with Node.js, Express, Prisma, and
+PostgreSQL. Authenticated with JWT and documented with Swagger.
 ---
-
-## 🚀 Tech Stack
-
+Features
+- JWT-based authentication
+- CRUD operations for Contacts and Notes
+- Field normalization for note content (note_body, note_text -> body)
+- PostgreSQL database via Prisma ORM
+- Swagger UI for API testing
+- Deduplication script for cleaning up test data
+- Fully containerizable, production-ready setup
+---
+Tech Stack
 - Node.js + Express
+- Prisma (ORM)
 - PostgreSQL
-- Prisma ORM
-- JWT Authentication
-- dotenv for config management
-- Postman/Thunder Client for testing
+- Swagger (swagger-ui-express + YAML)
+- dotenv for config
 
+- JWT (jsonwebtoken) for authentication
 ---
-
-## 📦 Project Structure
-
-contact-notes-service/ ├── src/ │ ├── routes/ │ │ ├── auth.js │ │ ├── contacts.js │ │ └── notes.js │ ├── middleware/ │ │ └── auth.js │ └── server.js ├── prisma/ │ └── schema.prisma ├── .env ├── .gitignore ├── package.json └── README.md
-
-yaml
-
----
-
-## 🔐 Authentication
-
-**Login Endpoint:**
-```http
-POST /login
-Body:
-
-json
-
-{
-  "username": "admin",
-  "password": "password"
-}
-✅ Returns a JWT token, which must be included in all protected endpoints as:
-
-makefile
-
-Authorization: Bearer <your_token>
-📘 API Endpoints
-🔑 Auth
-Method	Endpoint	Description
-POST	/login	Login to receive JWT token
-👥 Contacts
-Method	Endpoint	Description
-GET	/contacts	Get all contacts
-POST	/contacts	Create a contact
-GET	/contacts/:id	Get contact by ID
-PUT	/contacts/:id	Update a contact
-DELETE	/contacts/:id	Delete a contact
-📝 Notes
-Method	Endpoint	Description
-POST	/notes	Create a note (normalized input fields like note_body, note_text)
-GET	/notes/:id	Get a note by ID
-PUT	/notes/:id	Update a note
-DELETE	/notes/:id	Delete a note
-⚙️ Running Locally
-1. Clone the Repository
-
-git clone https://github.com/Stdioch1/contact-notes-service.git
+Setup Instructions
+1. Clone the Repo
+git clone https://github.com/your-username/contact-notes-service.git
 cd contact-notes-service
-2. Install Dependencies
-
+2. Create .env file
+DATABASE_URL="postgresql://postgres:your_password@localhost:5432/notesdb"
+JWT_SECRET=your_jwt_secret
+3. Install dependencies
 npm install
-3. Set up .env
-Create a .env file in the root directory:
+4. Set up the database
+Create the DB manually or using psql:
+CREATE DATABASE notesdb;
+Then push schema:
+npx prisma db push
+5. Seed sample data
+node prisma/seed.js
 
-
-JWT_SECRET=your_secret_key
-DATABASE_URL="postgresql://postgres:yourpassword@localhost:5432/notesdb"
-Make sure the database notesdb exists.
-
-4. Migrate the Database
-
-npx prisma migrate dev --name init
-5. Start the Server
-
+(Optional) Open Prisma Studio:
+npx prisma studio
+6. Start the server
 node src/server.js
-The server will start at:
-➡️ http://localhost:3000
+---
+API Documentation
+Once running, visit:
+http://localhost:3000/docs
+You->ll see a Swagger UI with all routes and examples.
+---
+Authentication
+1. Login via POST /login
+Use test credentials like:
+{
+"username": "admin",
+"password": "password"
+}
+2. Copy the returned JWT token.
+3. Click the Authorize button in Swagger and paste:
+Bearer <your-token>
+---
 
-📥 Field Normalization
-During note creation or update, the backend will automatically convert:
+Final Commands Summary
 
-note_body or note_text → body
+# PostgreSQL setup
+psql -U postgres
+CREATE DATABASE notesdb;
 
-You can send any of the three — they’ll be handled the same.
+# In project root
+npm install
+npx prisma db push
+node prisma/seed.js
+npx prisma studio
+node src/server.js
 
-🤔 Assumptions
-No user registration is required (single-user flow assumed).
-
-Notes must reference an existing contact (contactId).
-
-JWT expiration is 1 hour for demo purposes.
+# Swagger URL
+http://localhost:3000/docs

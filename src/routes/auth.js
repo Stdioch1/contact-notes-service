@@ -1,5 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+require('dotenv').config(); // ✅ This loads .env into process.env
 const router = express.Router();
 
 router.post('/', (req, res) => {
